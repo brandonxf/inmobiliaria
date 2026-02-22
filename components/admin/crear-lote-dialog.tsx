@@ -68,9 +68,10 @@ export function CrearLoteDialog({ etapas }: Props) {
           </div>
           <div className="flex flex-col gap-2">
             <Label htmlFor="etapa_id">Etapa</Label>
-            <Select name="etapa_id">
+            <Select name="etapa_id" defaultValue="none">
               <SelectTrigger><SelectValue placeholder="Sin etapa" /></SelectTrigger>
               <SelectContent>
+                <SelectItem value="none">Sin etapa</SelectItem>
                 {etapas.map((e) => (
                   <SelectItem key={e.id} value={String(e.id)}>{e.nombre}</SelectItem>
                 ))}
