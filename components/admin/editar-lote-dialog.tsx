@@ -57,6 +57,7 @@ export function EditarLoteDialog({ lote, etapas }: EditarLoteDialogProps) {
             </div>
           )}
           <Input type="hidden" name="id" value={lote.id} />
+          <Input type="hidden" name="codigo" value={lote.codigo} />
           
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
