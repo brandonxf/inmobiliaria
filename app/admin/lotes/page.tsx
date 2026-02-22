@@ -5,6 +5,7 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { CrearLoteDialog } from '@/components/admin/crear-lote-dialog'
 import { EditarLoteDialog } from '@/components/admin/editar-lote-dialog'
+import { EliminarLoteButton } from '@/components/admin/eliminar-lote-button'
 import { LoteEstadoSelect } from '@/components/admin/lote-estado-select'
 
 export default async function AdminLotesPage() {
@@ -51,8 +52,9 @@ export default async function AdminLotesPage() {
                   <TableCell>
                     <LoteEstadoSelect loteId={lote.id} currentEstado={lote.estado} />
                   </TableCell>
-                  <TableCell>
+                  <TableCell className="flex gap-2">
                     <EditarLoteDialog lote={lote} etapas={etapas} />
+                    <EliminarLoteButton loteId={lote.id} loteCodigo={lote.codigo} />
                   </TableCell>
                 </TableRow>
               ))}

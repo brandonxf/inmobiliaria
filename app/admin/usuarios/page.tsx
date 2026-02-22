@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { CrearUsuarioDialog } from '@/components/admin/crear-usuario-dialog'
 import { EditarUsuarioDialog } from '@/components/admin/editar-usuario-dialog'
+import { EliminarUsuarioButton } from '@/components/admin/eliminar-usuario-button'
 
 export default async function AdminUsuariosPage() {
   const sql = getDb()
@@ -45,8 +46,9 @@ export default async function AdminUsuariosPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-muted-foreground">{formatDate(u.created_at)}</TableCell>
-                  <TableCell>
+                  <TableCell className="flex gap-2">
                     <EditarUsuarioDialog usuario={u} />
+                    <EliminarUsuarioButton usuarioId={u.id} usuarioNombre={`${u.nombre} ${u.apellido}`} />
                   </TableCell>
                 </TableRow>
               ))}

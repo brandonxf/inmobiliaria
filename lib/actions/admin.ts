@@ -286,3 +286,42 @@ export async function toggleEtapaAction(id: number, activa: boolean) {
   await sql`UPDATE etapas SET activa = ${activa} WHERE id = ${id}`
   revalidatePath('/admin/etapas')
 }
+// --- Delete functions ---
+export async function eliminarUsuarioAction(usuarioId: number) {
+  await requireAdmin()
+  const sql = getDb()
+  
+  // Prevent deleting if user has purchases
+  const compras = await sql`SELECT COUNT(*) as count FROM compras WHERE cliente_id = ${usuarioId}`
+  if (compras[0].count > 0) {
+    return { error: 'No puedes eliminar un usuario que tiene compras o reservas' }
+  }
+
+  try {
+    await sql`DELETE FROM usuarios WHERE id = ${usuarioId}`
+    revalidatePath('/admin/usuarios')
+    return { success: true }
+  } catch {
+    return { error: 'Error al eliminar el usuario' }
+  }
+}
+
+export async function eliminarLoteAction(loteId: number) {
+  await requireAdmin()
+  const sql = getDb()
+  
+  // Prevent deleting if lot has purchases
+  const compras = await sql`SELECT COUNT(*) as count FROM compras WHERE lote_id = ${loteId}`
+  if (compras[0].count > 0) {
+    return { error: 'No puedes eliminar un lote que tiene compras o reservas' }
+  }
+
+  try {
+    await sql`DELETE FROM lotes WHERE id = ${loteId}`
+    revalidatePath('/admin/lotes')
+    revalidatePath('/dashboard/lotes')
+    return { success: true }
+  } catch {
+    return { error: 'Error al eliminar el lote' }
+  }
+}
