@@ -21,6 +21,10 @@ const loteSchema = z.object({
   estado: z.enum(['disponible', 'reservado', 'vendido']),
   etapa_id: z.coerce.number().nullable(),
   descripcion: z.string().optional(),
+  cuartos: z.coerce.number().min(0),
+  baños: z.coerce.number().min(0),
+  caracteristicas: z.string().optional(),
+  foto_url: z.string().optional(),
 })
 
 export async function crearLoteAction(_prevState: unknown, formData: FormData) {
@@ -33,6 +37,10 @@ export async function crearLoteAction(_prevState: unknown, formData: FormData) {
     estado: formData.get('estado') || 'disponible',
     etapa_id: formData.get('etapa_id') || null,
     descripcion: formData.get('descripcion'),
+    cuartos: formData.get('cuartos') || 0,
+    baños: formData.get('baños') || 0,
+    caracteristicas: formData.get('caracteristicas'),
+    foto_url: formData.get('foto_url'),
   }
   const parsed = loteSchema.safeParse(raw)
   if (!parsed.success) return { error: parsed.error.errors[0].message }
@@ -40,14 +48,53 @@ export async function crearLoteAction(_prevState: unknown, formData: FormData) {
   const sql = getDb()
   try {
     await sql`
-      INSERT INTO lotes (codigo, area_m2, ubicacion, valor, estado, etapa_id, descripcion)
-      VALUES (${parsed.data.codigo}, ${parsed.data.area_m2}, ${parsed.data.ubicacion || null}, ${parsed.data.valor}, ${parsed.data.estado}, ${parsed.data.etapa_id}, ${parsed.data.descripcion || null})
+      INSERT INTO lotes (codigo, area_m2, ubicacion, valor, estado, etapa_id, descripcion, cuartos, baños, caracteristicas, foto_url)
+      VALUES (${parsed.data.codigo}, ${parsed.data.area_m2}, ${parsed.data.ubicacion || null}, ${parsed.data.valor}, ${parsed.data.estado}, ${parsed.data.etapa_id}, ${parsed.data.descripcion || null}, ${parsed.data.cuartos}, ${parsed.data.baños}, ${parsed.data.caracteristicas || null}, ${parsed.data.foto_url || null})
     `
   } catch {
     return { error: 'El codigo de lote ya existe' }
   }
 
   revalidatePath('/admin/lotes')
+  revalidatePath('/dashboard/lotes')
+  return { success: true }
+}
+
+export async function actualizarLoteAction(_prevState: unknown, formData: FormData) {
+  await requireAdmin()
+  const id = formData.get('id') as string
+  const raw = {
+    codigo: formData.get('codigo'),
+    area_m2: formData.get('area_m2'),
+    ubicacion: formData.get('ubicacion'),
+    valor: formData.get('valor'),
+    estado: formData.get('estado') || 'disponible',
+    etapa_id: formData.get('etapa_id') || null,
+    descripcion: formData.get('descripcion'),
+    cuartos: formData.get('cuartos') || 0,
+    baños: formData.get('baños') || 0,
+    caracteristicas: formData.get('caracteristicas'),
+    foto_url: formData.get('foto_url'),
+  }
+  const parsed = loteSchema.safeParse(raw)
+  if (!parsed.success) return { error: parsed.error.errors[0].message }
+
+  const sql = getDb()
+  try {
+    await sql`
+      UPDATE lotes 
+      SET codigo = ${parsed.data.codigo}, area_m2 = ${parsed.data.area_m2}, ubicacion = ${parsed.data.ubicacion || null}, valor = ${parsed.data.valor}, 
+          estado = ${parsed.data.estado}, etapa_id = ${parsed.data.etapa_id}, descripcion = ${parsed.data.descripcion || null},
+          cuartos = ${parsed.data.cuartos}, baños = ${parsed.data.baños}, caracteristicas = ${parsed.data.caracteristicas || null},
+          foto_url = ${parsed.data.foto_url || null}, updated_at = NOW()
+      WHERE id = ${Number(id)}
+    `
+  } catch {
+    return { error: 'Error al actualizar el lote' }
+  }
+
+  revalidatePath('/admin/lotes')
+  revalidatePath('/dashboard/lotes')
   return { success: true }
 }
 
@@ -56,6 +103,7 @@ export async function actualizarLoteEstadoAction(loteId: number, estado: string)
   const sql = getDb()
   await sql`UPDATE lotes SET estado = ${estado}, updated_at = NOW() WHERE id = ${loteId}`
   revalidatePath('/admin/lotes')
+  revalidatePath('/admin/compras')
 }
 
 // --- Payment management ---
@@ -150,6 +198,7 @@ export async function crearUsuarioAction(_prevState: unknown, formData: FormData
   const nombre = formData.get('nombre') as string
   const apellido = formData.get('apellido') as string
   const email = formData.get('email') as string
+  const telefono = formData.get('telefono') as string
   const password = formData.get('password') as string
   const rol = formData.get('rol') as string
 
@@ -161,9 +210,48 @@ export async function crearUsuarioAction(_prevState: unknown, formData: FormData
 
   const passwordHash = await bcrypt.hash(password, 12)
   await sql`
-    INSERT INTO usuarios (nombre, apellido, email, password_hash, rol, verificado)
-    VALUES (${nombre}, ${apellido}, ${email}, ${passwordHash}, ${rol || 'cliente'}, true)
+    INSERT INTO usuarios (nombre, apellido, email, telefono, password_hash, rol, verificado)
+    VALUES (${nombre}, ${apellido}, ${email}, ${telefono || null}, ${passwordHash}, ${rol || 'cliente'}, true)
   `
+
+  revalidatePath('/admin/usuarios')
+  return { success: true }
+}
+
+export async function actualizarUsuarioAction(_prevState: unknown, formData: FormData) {
+  await requireAdmin()
+  const id = formData.get('id') as string
+  const nombre = formData.get('nombre') as string
+  const apellido = formData.get('apellido') as string
+  const email = formData.get('email') as string
+  const telefono = formData.get('telefono') as string
+  const rol = formData.get('rol') as string
+  const password = formData.get('password') as string
+
+  if (!nombre || !apellido || !email) return { error: 'Todos los campos son requeridos' }
+
+  const sql = getDb()
+  
+  // Check if email is already in use by another user
+  const existing = await sql`SELECT id FROM usuarios WHERE email = ${email} AND id != ${Number(id)}`
+  if (existing.length > 0) return { error: 'Ya existe un usuario con este email' }
+
+  if (password) {
+    // If password is provided, update it
+    const passwordHash = await bcrypt.hash(password, 12)
+    await sql`
+      UPDATE usuarios 
+      SET nombre = ${nombre}, apellido = ${apellido}, email = ${email}, telefono = ${telefono || null}, password_hash = ${passwordHash}
+      WHERE id = ${Number(id)}
+    `
+  } else {
+    // If no password, just update the other fields
+    await sql`
+      UPDATE usuarios 
+      SET nombre = ${nombre}, apellido = ${apellido}, email = ${email}, telefono = ${telefono || null}, rol = ${rol}
+      WHERE id = ${Number(id)}
+    `
+  }
 
   revalidatePath('/admin/usuarios')
   return { success: true }

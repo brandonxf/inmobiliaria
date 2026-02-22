@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { CrearLoteDialog } from '@/components/admin/crear-lote-dialog'
+import { EditarLoteDialog } from '@/components/admin/editar-lote-dialog'
 import { LoteEstadoSelect } from '@/components/admin/lote-estado-select'
 
 export default async function AdminLotesPage() {
@@ -30,10 +31,12 @@ export default async function AdminLotesPage() {
               <TableRow>
                 <TableHead>Codigo</TableHead>
                 <TableHead>Area</TableHead>
-                <TableHead>Ubicacion</TableHead>
+                <TableHead>Cuartos</TableHead>
+                <TableHead>Baños</TableHead>
                 <TableHead>Valor</TableHead>
                 <TableHead>Etapa</TableHead>
                 <TableHead>Estado</TableHead>
+                <TableHead>Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -41,11 +44,15 @@ export default async function AdminLotesPage() {
                 <TableRow key={lote.id}>
                   <TableCell className="font-medium">{lote.codigo}</TableCell>
                   <TableCell>{Number(lote.area_m2)} m2</TableCell>
-                  <TableCell>{lote.ubicacion || '-'}</TableCell>
+                  <TableCell>{lote.cuartos || '-'}</TableCell>
+                  <TableCell>{lote.baños || '-'}</TableCell>
                   <TableCell>{formatCurrency(Number(lote.valor))}</TableCell>
                   <TableCell>{lote.etapa_nombre || '-'}</TableCell>
                   <TableCell>
                     <LoteEstadoSelect loteId={lote.id} currentEstado={lote.estado} />
+                  </TableCell>
+                  <TableCell>
+                    <EditarLoteDialog lote={lote} etapas={etapas} />
                   </TableCell>
                 </TableRow>
               ))}

@@ -1,98 +1,130 @@
 'use client'
 
 import { useActionState, useState } from 'react'
-import { crearLoteAction } from '@/lib/actions/admin'
+import { actualizarLoteAction } from '@/lib/actions/admin'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { AlertCircle, CheckCircle2, Loader2, Plus } from 'lucide-react'
+import { AlertCircle, CheckCircle2, Loader2, Pencil } from 'lucide-react'
 
-interface Props {
+interface EditarLoteDialogProps {
+  lote: {
+    id: number
+    codigo: string
+    area_m2: number
+    ubicacion: string | null
+    valor: number
+    etapa_id: number | null
+    descripcion: string | null
+    cuartos: number
+    baños: number
+    foto_url: string | null
+    caracteristicas: string | null
+  }
   etapas: Array<{ id: number; nombre: string }>
 }
 
-export function CrearLoteDialog({ etapas }: Props) {
+export function EditarLoteDialog({ lote, etapas }: EditarLoteDialogProps) {
   const [open, setOpen] = useState(false)
-  const [state, action, pending] = useActionState(crearLoteAction, null)
+  const [state, action, pending] = useActionState(actualizarLoteAction, null)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="gap-2"><Plus className="h-4 w-4" />Nuevo Lote</Button>
+        <Button variant="outline" size="sm" className="gap-2">
+          <Pencil className="h-4 w-4" />
+          Editar
+        </Button>
       </DialogTrigger>
-      <DialogContent>
-        <DialogHeader><DialogTitle>Crear Lote</DialogTitle></DialogHeader>
+      <DialogContent className="max-h-[90vh] overflow-y-auto">
+        <DialogHeader>
+          <DialogTitle>Editar Lote</DialogTitle>
+        </DialogHeader>
         <form action={action} className="flex flex-col gap-4">
           {state?.error && (
             <div className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
-              <AlertCircle className="h-4 w-4 shrink-0" />{state.error}
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              {state.error}
             </div>
           )}
           {state?.success && (
             <div className="flex items-center gap-2 rounded-lg border border-accent/30 bg-accent/10 px-3 py-2.5 text-sm text-accent-foreground">
-              <CheckCircle2 className="h-4 w-4 shrink-0" />Lote creado exitosamente.
+              <CheckCircle2 className="h-4 w-4 shrink-0" />
+              Lote actualizado exitosamente.
             </div>
           )}
+          <Input type="hidden" name="id" value={lote.id} />
+          
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="codigo">Codigo</Label>
-              <Input id="codigo" name="codigo" placeholder="L-011" required />
+              <Input id="codigo" name="codigo" defaultValue={lote.codigo} required disabled />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="area_m2">Area (m2)</Label>
-              <Input id="area_m2" name="area_m2" type="number" min="1" step="0.01" required />
+              <Input id="area_m2" name="area_m2" type="number" min="1" step="0.01" defaultValue={lote.area_m2} required />
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="cuartos">Cuartos</Label>
-              <Input id="cuartos" name="cuartos" type="number" min="0" defaultValue="0" required />
+              <Input id="cuartos" name="cuartos" type="number" min="0" defaultValue={lote.cuartos} required />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="baños">Baños</Label>
-              <Input id="baños" name="baños" type="number" min="0" defaultValue="0" required />
+              <Input id="baños" name="baños" type="number" min="0" defaultValue={lote.baños} required />
             </div>
           </div>
 
           <div className="flex flex-col gap-2">
             <Label htmlFor="valor">Valor ($)</Label>
-            <Input id="valor" name="valor" type="number" min="1" required />
+            <Input id="valor" name="valor" type="number" min="1" defaultValue={lote.valor} required />
           </div>
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="ubicacion">Ubicacion</Label>
-            <Input id="ubicacion" name="ubicacion" placeholder="Manzana A" />
+            <Input id="ubicacion" name="ubicacion" defaultValue={lote.ubicacion || ''} />
           </div>
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="etapa_id">Etapa</Label>
-            <Select name="etapa_id">
-              <SelectTrigger><SelectValue placeholder="Sin etapa" /></SelectTrigger>
+            <Select name="etapa_id" defaultValue={lote.etapa_id ? String(lote.etapa_id) : ''}>
+              <SelectTrigger>
+                <SelectValue placeholder="Sin etapa" />
+              </SelectTrigger>
               <SelectContent>
+                <SelectItem value="">Sin etapa</SelectItem>
                 {etapas.map((e) => (
-                  <SelectItem key={e.id} value={String(e.id)}>{e.nombre}</SelectItem>
+                  <SelectItem key={e.id} value={String(e.id)}>
+                    {e.nombre}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
           </div>
+
           <div className="flex flex-col gap-2">
-            <Label htmlFor="foto_url">URL Foto (opcional)</Label>
-            <Input id="foto_url" name="foto_url" type="url" placeholder="https://ejemplo.com/foto.jpg" />
+            <Label htmlFor="foto_url">URL Foto</Label>
+            <Input id="foto_url" name="foto_url" type="url" defaultValue={lote.foto_url || ''} placeholder="https://ejemplo.com/foto.jpg" />
           </div>
-          <input type="hidden" name="estado" value="disponible" />
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="descripcion">Descripcion</Label>
-            <Textarea id="descripcion" name="descripcion" rows={2} />
+            <Textarea id="descripcion" name="descripcion" rows={3} defaultValue={lote.descripcion || ''} />
           </div>
+
           <div className="flex flex-col gap-2">
             <Label htmlFor="caracteristicas">Caracteristicas Adicionales</Label>
-            <Textarea id="caracteristicas" name="caracteristicas" rows={2} placeholder="Piscina, jardín, etc." />
+            <Textarea id="caracteristicas" name="caracteristicas" rows={2} placeholder="Piscina, jardín, etc." defaultValue={lote.caracteristicas || ''} />
           </div>
+
           <Button type="submit" disabled={pending}>
             {pending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
-            Crear Lote
+            Actualizar Lote
           </Button>
         </form>
       </DialogContent>

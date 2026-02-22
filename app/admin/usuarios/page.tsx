@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { CrearUsuarioDialog } from '@/components/admin/crear-usuario-dialog'
+import { EditarUsuarioDialog } from '@/components/admin/editar-usuario-dialog'
 
 export default async function AdminUsuariosPage() {
   const sql = getDb()
@@ -29,6 +30,7 @@ export default async function AdminUsuariosPage() {
                 <TableHead>Telefono</TableHead>
                 <TableHead>Rol</TableHead>
                 <TableHead>Registro</TableHead>
+                <TableHead>Acciones</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -43,6 +45,9 @@ export default async function AdminUsuariosPage() {
                     </Badge>
                   </TableCell>
                   <TableCell className="text-muted-foreground">{formatDate(u.created_at)}</TableCell>
+                  <TableCell>
+                    <EditarUsuarioDialog usuario={u} />
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
