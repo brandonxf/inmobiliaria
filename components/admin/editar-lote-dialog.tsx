@@ -23,7 +23,6 @@ interface EditarLoteDialogProps {
     baños: number
     parqueaderos: number
     foto_url: string | null
-    caracteristicas: string | null
   }
   etapas: Array<{ id: number; nombre: string }>
 }
@@ -121,11 +120,6 @@ export function EditarLoteDialog({ lote, etapas }: EditarLoteDialogProps) {
           <div className="flex flex-col gap-2">
             <Label htmlFor="descripcion">Descripcion</Label>
             <Textarea id="descripcion" name="descripcion" rows={3} defaultValue={lote.descripcion || ''} />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="caracteristicas">Caracteristicas Adicionales</Label>
-            <Textarea id="caracteristicas" name="caracteristicas" rows={2} placeholder="Piscina, jardín, etc." defaultValue={lote.caracteristicas || ''} />
           </div>
 
           <Button type="submit" disabled={pending}>

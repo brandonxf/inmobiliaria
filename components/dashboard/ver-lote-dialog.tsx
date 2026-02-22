@@ -9,21 +9,7 @@ import { MapPin, Maximize2, Sofa, Waves, ParkingCircle } from 'lucide-react'
 import { ReservaLoteDialog } from './reserva-lote-dialog'
 
 interface VerLoteDialogProps {
-  lote: {
-    id: number
-    codigo: string
-    area_m2: number
-    ubicacion: string | null
-    valor: number
-    etapa_nombre: string | null
-    descripcion: string | null
-    cuartos: number
-    baños: number
-    parqueaderos: number
-    foto_url: string | null
-    caracteristicas: string | null
-    estado: string
-  }
+  lote: any
 }
 
 export function VerLoteDialog({ lote }: VerLoteDialogProps) {
@@ -120,14 +106,6 @@ export function VerLoteDialog({ lote }: VerLoteDialogProps) {
             <div>
               <p className="text-sm font-semibold">Descripción</p>
               <p className="text-sm text-muted-foreground mt-2">{lote.descripcion}</p>
-            </div>
-          )}
-
-          {/* Características */}
-          {lote.caracteristicas && (
-            <div>
-              <p className="text-sm font-semibold">Características Adicionales</p>
-              <p className="text-sm text-muted-foreground mt-2">{lote.caracteristicas}</p>
             </div>
           )}
 

@@ -3,7 +3,6 @@ ALTER TABLE lotes ADD COLUMN IF NOT EXISTS cuartos INT DEFAULT 0;
 ALTER TABLE lotes ADD COLUMN IF NOT EXISTS baños INT DEFAULT 0;
 ALTER TABLE lotes ADD COLUMN IF NOT EXISTS parqueaderos INT DEFAULT 0;
 ALTER TABLE lotes ADD COLUMN IF NOT EXISTS foto_url VARCHAR(500);
-ALTER TABLE lotes ADD COLUMN IF NOT EXISTS caracteristicas TEXT;
 
 -- Actualizar tabla compras para almacenar datos de reserva y pago
 ALTER TABLE compras ADD COLUMN IF NOT EXISTS numero_cuenta VARCHAR(50);

@@ -92,10 +92,6 @@ export function CrearLoteDialog({ etapas }: Props) {
             <Label htmlFor="descripcion">Descripcion</Label>
             <Textarea id="descripcion" name="descripcion" rows={2} />
           </div>
-          <div className="flex flex-col gap-2">
-            <Label htmlFor="caracteristicas">Caracteristicas Adicionales</Label>
-            <Textarea id="caracteristicas" name="caracteristicas" rows={2} placeholder="Piscina, jardín, etc." />
-          </div>
           <Button type="submit" disabled={pending}>
             {pending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
             Crear Lote

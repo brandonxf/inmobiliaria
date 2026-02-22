@@ -16,22 +16,22 @@ async function requireAdmin() {
 const loteSchema = z.object({
   codigo: z.string().min(1),
   area_m2: z.coerce.number().positive(),
-  ubicacion: z.string().optional(),
+  ubicacion: z.string().nullish(), // Acepta null, undefined o string
   valor: z.coerce.number().positive(),
   estado: z.enum(['disponible', 'reservado', 'vendido']),
-  etapa_id: z.coerce.number().nullable(),
-  descripcion: z.string().optional(),
+  etapa_id: z.coerce.number().nullable().optional(),
+  descripcion: z.string().nullish(),
   cuartos: z.coerce.number().min(0),
   baños: z.coerce.number().min(0),
   parqueaderos: z.coerce.number().min(0),
-  caracteristicas: z.string().optional(),
-  foto_url: z.string().optional(),
+  foto_url: z.string().nullish(),
 })
 
-// Helper to convert empty strings to undefined
+// Helper to convert empty strings to undefined, never null
 const getOptionalString = (value: FormDataEntryValue | null): string | undefined => {
-  const str = value as string | null
-  return str && str.trim() ? str : undefined
+  if (!value) return undefined
+  const str = String(value).trim()
+  return str.length > 0 ? str : undefined
 }
 
 export async function crearLoteAction(_prevState: unknown, formData: FormData) {
@@ -42,12 +42,11 @@ export async function crearLoteAction(_prevState: unknown, formData: FormData) {
     ubicacion: getOptionalString(formData.get('ubicacion')),
     valor: formData.get('valor'),
     estado: formData.get('estado') || 'disponible',
-    etapa_id: formData.get('etapa_id') === 'none' ? null : getOptionalString(formData.get('etapa_id')) || null,
+    etapa_id: formData.get('etapa_id') === 'none' ? null : getOptionalString(formData.get('etapa_id')) ?? null,
     descripcion: getOptionalString(formData.get('descripcion')),
     cuartos: formData.get('cuartos') || 0,
     baños: formData.get('baños') || 0,
     parqueaderos: formData.get('parqueaderos') || 0,
-    caracteristicas: getOptionalString(formData.get('caracteristicas')),
     foto_url: getOptionalString(formData.get('foto_url')),
   }
   const parsed = loteSchema.safeParse(raw)
@@ -56,8 +55,8 @@ export async function crearLoteAction(_prevState: unknown, formData: FormData) {
   const sql = getDb()
   try {
     await sql`
-      INSERT INTO lotes (codigo, area_m2, ubicacion, valor, estado, etapa_id, descripcion, cuartos, baños, parqueaderos, caracteristicas, foto_url)
-      VALUES (${parsed.data.codigo}, ${parsed.data.area_m2}, ${parsed.data.ubicacion || null}, ${parsed.data.valor}, ${parsed.data.estado}, ${parsed.data.etapa_id}, ${parsed.data.descripcion || null}, ${parsed.data.cuartos}, ${parsed.data.baños}, ${parsed.data.parqueaderos}, ${parsed.data.caracteristicas || null}, ${parsed.data.foto_url || null})
+      INSERT INTO lotes (codigo, area_m2, ubicacion, valor, estado, etapa_id, descripcion, cuartos, baños, parqueaderos, foto_url)
+      VALUES (${parsed.data.codigo}, ${parsed.data.area_m2}, ${parsed.data.ubicacion ?? null}, ${parsed.data.valor}, ${parsed.data.estado}, ${parsed.data.etapa_id}, ${parsed.data.descripcion ?? null}, ${parsed.data.cuartos}, ${parsed.data.baños}, ${parsed.data.parqueaderos}, ${parsed.data.foto_url ?? null})
     `
   } catch {
     return { error: 'El codigo de lote ya existe' }
@@ -77,12 +76,11 @@ export async function actualizarLoteAction(_prevState: unknown, formData: FormDa
     ubicacion: getOptionalString(formData.get('ubicacion')),
     valor: formData.get('valor'),
     estado: formData.get('estado') || 'disponible',
-    etapa_id: formData.get('etapa_id') === 'none' ? null : getOptionalString(formData.get('etapa_id')) || null,
+    etapa_id: formData.get('etapa_id') === 'none' ? null : getOptionalString(formData.get('etapa_id')) ?? null,
     descripcion: getOptionalString(formData.get('descripcion')),
     cuartos: formData.get('cuartos') || 0,
     baños: formData.get('baños') || 0,
     parqueaderos: formData.get('parqueaderos') || 0,
-    caracteristicas: getOptionalString(formData.get('caracteristicas')),
     foto_url: getOptionalString(formData.get('foto_url')),
   }
   const parsed = loteSchema.safeParse(raw)
@@ -92,10 +90,10 @@ export async function actualizarLoteAction(_prevState: unknown, formData: FormDa
   try {
     await sql`
       UPDATE lotes 
-      SET codigo = ${parsed.data.codigo}, area_m2 = ${parsed.data.area_m2}, ubicacion = ${parsed.data.ubicacion || null}, valor = ${parsed.data.valor}, 
-          estado = ${parsed.data.estado}, etapa_id = ${parsed.data.etapa_id}, descripcion = ${parsed.data.descripcion || null},
-          cuartos = ${parsed.data.cuartos}, baños = ${parsed.data.baños}, parqueaderos = ${parsed.data.parqueaderos}, caracteristicas = ${parsed.data.caracteristicas || null},
-          foto_url = ${parsed.data.foto_url || null}, updated_at = NOW()
+      SET codigo = ${parsed.data.codigo}, area_m2 = ${parsed.data.area_m2}, ubicacion = ${parsed.data.ubicacion ?? null}, valor = ${parsed.data.valor}, 
+          estado = ${parsed.data.estado}, etapa_id = ${parsed.data.etapa_id}, descripcion = ${parsed.data.descripcion ?? null},
+          cuartos = ${parsed.data.cuartos}, baños = ${parsed.data.baños}, parqueaderos = ${parsed.data.parqueaderos},
+          foto_url = ${parsed.data.foto_url ?? null}, updated_at = NOW()
       WHERE id = ${Number(id)}
     `
   } catch {
