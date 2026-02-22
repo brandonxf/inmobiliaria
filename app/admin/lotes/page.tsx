@@ -34,6 +34,7 @@ export default async function AdminLotesPage() {
                 <TableHead>Area</TableHead>
                 <TableHead>Cuartos</TableHead>
                 <TableHead>Baños</TableHead>
+                <TableHead>Parqueaderos</TableHead>
                 <TableHead>Valor</TableHead>
                 <TableHead>Etapa</TableHead>
                 <TableHead>Estado</TableHead>
@@ -47,6 +48,7 @@ export default async function AdminLotesPage() {
                   <TableCell>{Number(lote.area_m2)} m2</TableCell>
                   <TableCell>{lote.cuartos || '-'}</TableCell>
                   <TableCell>{lote.baños || '-'}</TableCell>
+                  <TableCell>{lote.parqueaderos || '-'}</TableCell>
                   <TableCell>{formatCurrency(Number(lote.valor))}</TableCell>
                   <TableCell>{lote.etapa_nombre || '-'}</TableCell>
                   <TableCell>

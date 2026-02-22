@@ -59,6 +59,11 @@ export function CrearLoteDialog({ etapas }: Props) {
           </div>
 
           <div className="flex flex-col gap-2">
+            <Label htmlFor="parqueaderos">Parqueaderos</Label>
+            <Input id="parqueaderos" name="parqueaderos" type="number" min="0" defaultValue="0" required />
+          </div>
+
+          <div className="flex flex-col gap-2">
             <Label htmlFor="valor">Valor ($)</Label>
             <Input id="valor" name="valor" type="number" min="1" required />
           </div>

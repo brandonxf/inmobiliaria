@@ -2,7 +2,7 @@ import { getDb } from '@/lib/db'
 import { formatCurrency } from '@/lib/format'
 import { Badge } from '@/components/ui/badge'
 import { Card, CardContent, CardHeader } from '@/components/ui/card'
-import { MapPin, Maximize2, Sofa, Waves } from 'lucide-react'
+import { MapPin, Maximize2, Sofa, Waves, ParkingCircle } from 'lucide-react'
 import { getEstadoLabel, getEstadoColor } from '@/lib/format'
 import { VerLoteDialog } from '@/components/dashboard/ver-lote-dialog'
 
@@ -63,6 +63,12 @@ export default async function LotesPage() {
                   <Waves className="h-4 w-4 text-muted-foreground" />
                   <span>{lote.baños} baños</span>
                 </div>
+                {lote.parqueaderos > 0 && (
+                  <div className="flex items-center gap-2">
+                    <ParkingCircle className="h-4 w-4 text-muted-foreground" />
+                    <span>{lote.parqueaderos} parqueaderos</span>
+                  </div>
+                )}
               </div>
 
               {lote.ubicacion && (

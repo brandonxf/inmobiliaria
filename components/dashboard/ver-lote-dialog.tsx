@@ -5,7 +5,7 @@ import { formatCurrency } from '@/lib/format'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
-import { MapPin, Maximize2, Sofa, Waves } from 'lucide-react'
+import { MapPin, Maximize2, Sofa, Waves, ParkingCircle } from 'lucide-react'
 import { ReservaLoteDialog } from './reserva-lote-dialog'
 
 interface VerLoteDialogProps {
@@ -19,6 +19,7 @@ interface VerLoteDialogProps {
     descripcion: string | null
     cuartos: number
     baños: number
+    parqueaderos: number
     foto_url: string | null
     caracteristicas: string | null
     estado: string
@@ -87,6 +88,13 @@ export function VerLoteDialog({ lote }: VerLoteDialogProps) {
               <div className="flex items-center gap-2 mt-1">
                 <Waves className="h-4 w-4 text-primary" />
                 <p className="font-semibold">{lote.baños}</p>
+              </div>
+            </div>
+            <div>
+              <p className="text-sm text-muted-foreground">Parqueaderos</p>
+              <div className="flex items-center gap-2 mt-1">
+                <ParkingCircle className="h-4 w-4 text-primary" />
+                <p className="font-semibold">{lote.parqueaderos}</p>
               </div>
             </div>
           </div>

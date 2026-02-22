@@ -1,6 +1,7 @@
 -- Migración: Agregar campos adicionales a la tabla lotes
 ALTER TABLE lotes ADD COLUMN IF NOT EXISTS cuartos INT DEFAULT 0;
 ALTER TABLE lotes ADD COLUMN IF NOT EXISTS baños INT DEFAULT 0;
+ALTER TABLE lotes ADD COLUMN IF NOT EXISTS parqueaderos INT DEFAULT 0;
 ALTER TABLE lotes ADD COLUMN IF NOT EXISTS foto_url VARCHAR(500);
 ALTER TABLE lotes ADD COLUMN IF NOT EXISTS caracteristicas TEXT;
 
