@@ -72,11 +72,11 @@ export function EditarLoteDialog({ lote, etapas }: EditarLoteDialogProps) {
           <div className="grid grid-cols-2 gap-4">
             <div className="flex flex-col gap-2">
               <Label htmlFor="cuartos">Cuartos</Label>
-              <Input id="cuartos" name="cuartos" type="number" min="0" defaultValue={lote.cuartos} required />
+              <Input id="cuartos" name="cuartos" type="number" min="0" defaultValue={lote.cuartos || 0} required />
             </div>
             <div className="flex flex-col gap-2">
               <Label htmlFor="baños">Baños</Label>
-              <Input id="baños" name="baños" type="number" min="0" defaultValue={lote.baños} required />
+              <Input id="baños" name="baños" type="number" min="0" defaultValue={lote.baños || 0} required />
             </div>
           </div>
 
