@@ -27,20 +27,26 @@ const loteSchema = z.object({
   foto_url: z.string().optional(),
 })
 
+// Helper to convert empty strings to undefined
+const getOptionalString = (value: FormDataEntryValue | null): string | undefined => {
+  const str = value as string | null
+  return str && str.trim() ? str : undefined
+}
+
 export async function crearLoteAction(_prevState: unknown, formData: FormData) {
   await requireAdmin()
   const raw = {
     codigo: formData.get('codigo'),
     area_m2: formData.get('area_m2'),
-    ubicacion: formData.get('ubicacion'),
+    ubicacion: getOptionalString(formData.get('ubicacion')),
     valor: formData.get('valor'),
     estado: formData.get('estado') || 'disponible',
-    etapa_id: formData.get('etapa_id') === 'none' ? null : formData.get('etapa_id') || null,
-    descripcion: formData.get('descripcion'),
+    etapa_id: formData.get('etapa_id') === 'none' ? null : getOptionalString(formData.get('etapa_id')) || null,
+    descripcion: getOptionalString(formData.get('descripcion')),
     cuartos: formData.get('cuartos') || 0,
     baños: formData.get('baños') || 0,
-    caracteristicas: formData.get('caracteristicas'),
-    foto_url: formData.get('foto_url'),
+    caracteristicas: getOptionalString(formData.get('caracteristicas')),
+    foto_url: getOptionalString(formData.get('foto_url')),
   }
   const parsed = loteSchema.safeParse(raw)
   if (!parsed.success) return { error: parsed.error.errors[0].message }
@@ -66,15 +72,15 @@ export async function actualizarLoteAction(_prevState: unknown, formData: FormDa
   const raw = {
     codigo: formData.get('codigo'),
     area_m2: formData.get('area_m2'),
-    ubicacion: formData.get('ubicacion'),
+    ubicacion: getOptionalString(formData.get('ubicacion')),
     valor: formData.get('valor'),
     estado: formData.get('estado') || 'disponible',
-    etapa_id: formData.get('etapa_id') === 'none' ? null : formData.get('etapa_id') || null,
-    descripcion: formData.get('descripcion'),
+    etapa_id: formData.get('etapa_id') === 'none' ? null : getOptionalString(formData.get('etapa_id')) || null,
+    descripcion: getOptionalString(formData.get('descripcion')),
     cuartos: formData.get('cuartos') || 0,
     baños: formData.get('baños') || 0,
-    caracteristicas: formData.get('caracteristicas'),
-    foto_url: formData.get('foto_url'),
+    caracteristicas: getOptionalString(formData.get('caracteristicas')),
+    foto_url: getOptionalString(formData.get('foto_url')),
   }
   const parsed = loteSchema.safeParse(raw)
   if (!parsed.success) return { error: parsed.error.errors[0].message }
