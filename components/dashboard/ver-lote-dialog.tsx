@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { formatCurrency } from '@/lib/format'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { MapPin, Maximize2, Sofa, Waves, ParkingCircle } from 'lucide-react'
 import { ReservaLoteDialog } from './reserva-lote-dialog'
@@ -24,14 +24,15 @@ export function VerLoteDialog({ lote }: VerLoteDialogProps) {
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Lote {lote.codigo}</DialogTitle>
+          <DialogDescription>Información detallada del lote.</DialogDescription>
         </DialogHeader>
 
         <div className="flex flex-col gap-6">
           {/* Foto */}
           <div className="relative h-64 w-full rounded-lg border border-border bg-muted overflow-hidden">
-            {lote.foto_url ? (
+            {lote.imagen_url ? (
               <img
-                src={lote.foto_url}
+                src={lote.imagen_url}
                 alt={`Lote ${lote.codigo}`}
                 className="h-full w-full object-cover"
               />
@@ -73,7 +74,7 @@ export function VerLoteDialog({ lote }: VerLoteDialogProps) {
               <p className="text-sm text-muted-foreground">Baños</p>
               <div className="flex items-center gap-2 mt-1">
                 <Waves className="h-4 w-4 text-primary" />
-                <p className="font-semibold">{lote.baños}</p>
+                <p className="font-semibold">{lote.banos}</p>
               </div>
             </div>
             <div>

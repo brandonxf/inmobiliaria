@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react'
 import { actualizarUsuarioAction } from '@/lib/actions/admin'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -35,6 +35,7 @@ export function EditarUsuarioDialog({ usuario }: EditarUsuarioDialogProps) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Editar Usuario</DialogTitle>
+          <DialogDescription>Modifica los datos del usuario.</DialogDescription>
         </DialogHeader>
         <form action={action} className="flex flex-col gap-4">
           {state?.error && (

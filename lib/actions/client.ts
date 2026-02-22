@@ -53,8 +53,8 @@ export async function crearReservaAction(_prevState: unknown, formData: FormData
 
   // Create reservation
   await sql`
-    INSERT INTO compras (cliente_id, lote_id, valor_total, cuota_inicial, num_cuotas, valor_cuota, saldo_pendiente, numero_cuenta, metodo_pago, tipo_reserva, estado)
-    VALUES (${session.userId}, ${parsed.data.lote_id}, ${valorTotal}, ${cuotaInicial}, ${parsed.data.num_cuotas}, ${valorCuota}, ${saldoPendiente}, ${parsed.data.numero_cuenta}, ${parsed.data.metodo_pago}, 'reserva', 'activa')
+    INSERT INTO compras (cliente_id, lote_id, valor_total, cuota_inicial, num_cuotas, valor_cuota, saldo_pendiente, estado)
+    VALUES (${session.userId}, ${parsed.data.lote_id}, ${valorTotal}, ${cuotaInicial}, ${parsed.data.num_cuotas}, ${valorCuota}, ${saldoPendiente}, 'activa')
   `
 
   // Update lot status

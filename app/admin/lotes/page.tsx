@@ -22,7 +22,7 @@ export default async function AdminLotesPage() {
           <h1 className="text-2xl font-bold text-foreground">Lotes</h1>
           <p className="text-muted-foreground">Gestiona los lotes del proyecto.</p>
         </div>
-        <CrearLoteDialog etapas={etapas} />
+        <CrearLoteDialog etapas={etapas as any} />
       </div>
 
       <Card>
@@ -47,7 +47,7 @@ export default async function AdminLotesPage() {
                   <TableCell className="font-medium">{lote.codigo}</TableCell>
                   <TableCell>{Number(lote.area_m2)} m2</TableCell>
                   <TableCell>{lote.cuartos || '-'}</TableCell>
-                  <TableCell>{lote.baños || '-'}</TableCell>
+                  <TableCell>{lote.banos || '-'}</TableCell>
                   <TableCell>{lote.parqueaderos || '-'}</TableCell>
                   <TableCell>{formatCurrency(Number(lote.valor))}</TableCell>
                   <TableCell>{lote.etapa_nombre || '-'}</TableCell>
@@ -55,7 +55,7 @@ export default async function AdminLotesPage() {
                     <LoteEstadoSelect loteId={lote.id} currentEstado={lote.estado} />
                   </TableCell>
                   <TableCell className="flex gap-2">
-                    <EditarLoteDialog lote={lote} etapas={etapas} />
+                    <EditarLoteDialog lote={lote as any} etapas={etapas as any} />
                     <EliminarLoteButton loteId={lote.id} loteCodigo={lote.codigo} />
                   </TableCell>
                 </TableRow>

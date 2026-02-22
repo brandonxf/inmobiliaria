@@ -22,9 +22,22 @@ const loteSchema = z.object({
   etapa_id: z.coerce.number().nullable().optional(),
   descripcion: z.string().nullish(),
   cuartos: z.coerce.number().min(0),
-  baños: z.coerce.number().min(0),
+  banos: z.coerce.number().min(0),
   parqueaderos: z.coerce.number().min(0),
-  foto_url: z.string().nullish(),
+  imagen_url: z.string().nullish(),
+})
+
+const loteUpdateSchema = z.object({
+  codigo: z.string().min(1),
+  area_m2: z.coerce.number().positive(),
+  ubicacion: z.string().nullish(),
+  valor: z.coerce.number().positive(),
+  etapa_id: z.coerce.number().nullable().optional(),
+  descripcion: z.string().nullish(),
+  cuartos: z.coerce.number().min(0),
+  banos: z.coerce.number().min(0),
+  parqueaderos: z.coerce.number().min(0),
+  imagen_url: z.string().nullish(),
 })
 
 // Helper to convert empty strings to undefined, never null
@@ -45,9 +58,9 @@ export async function crearLoteAction(_prevState: unknown, formData: FormData) {
     etapa_id: formData.get('etapa_id') === 'none' ? null : getOptionalString(formData.get('etapa_id')) ?? null,
     descripcion: getOptionalString(formData.get('descripcion')),
     cuartos: formData.get('cuartos') || 0,
-    baños: formData.get('baños') || 0,
+    banos: formData.get('banos') || 0,
     parqueaderos: formData.get('parqueaderos') || 0,
-    foto_url: getOptionalString(formData.get('foto_url')),
+    imagen_url: getOptionalString(formData.get('imagen_url')),
   }
   const parsed = loteSchema.safeParse(raw)
   if (!parsed.success) return { error: parsed.error.errors[0].message }
@@ -55,8 +68,8 @@ export async function crearLoteAction(_prevState: unknown, formData: FormData) {
   const sql = getDb()
   try {
     await sql`
-      INSERT INTO lotes (codigo, area_m2, ubicacion, valor, estado, etapa_id, descripcion, cuartos, baños, parqueaderos, foto_url)
-      VALUES (${parsed.data.codigo}, ${parsed.data.area_m2}, ${parsed.data.ubicacion ?? null}, ${parsed.data.valor}, ${parsed.data.estado}, ${parsed.data.etapa_id}, ${parsed.data.descripcion ?? null}, ${parsed.data.cuartos}, ${parsed.data.baños}, ${parsed.data.parqueaderos}, ${parsed.data.foto_url ?? null})
+      INSERT INTO lotes (codigo, area_m2, ubicacion, valor, estado, etapa_id, descripcion, cuartos, banos, parqueaderos, imagen_url)
+      VALUES (${parsed.data.codigo}, ${parsed.data.area_m2}, ${parsed.data.ubicacion ?? null}, ${parsed.data.valor}, ${parsed.data.estado}, ${parsed.data.etapa_id}, ${parsed.data.descripcion ?? null}, ${parsed.data.cuartos}, ${parsed.data.banos}, ${parsed.data.parqueaderos}, ${parsed.data.imagen_url ?? null})
     `
   } catch {
     return { error: 'El codigo de lote ya existe' }
@@ -75,28 +88,28 @@ export async function actualizarLoteAction(_prevState: unknown, formData: FormDa
     area_m2: formData.get('area_m2'),
     ubicacion: getOptionalString(formData.get('ubicacion')),
     valor: formData.get('valor'),
-    estado: formData.get('estado') || 'disponible',
     etapa_id: formData.get('etapa_id') === 'none' ? null : getOptionalString(formData.get('etapa_id')) ?? null,
     descripcion: getOptionalString(formData.get('descripcion')),
     cuartos: formData.get('cuartos') || 0,
-    baños: formData.get('baños') || 0,
+    banos: formData.get('banos') || 0,
     parqueaderos: formData.get('parqueaderos') || 0,
-    foto_url: getOptionalString(formData.get('foto_url')),
+    imagen_url: getOptionalString(formData.get('imagen_url')),
   }
-  const parsed = loteSchema.safeParse(raw)
+  const parsed = loteUpdateSchema.safeParse(raw)
   if (!parsed.success) return { error: parsed.error.errors[0].message }
 
   const sql = getDb()
   try {
     await sql`
-      UPDATE lotes 
-      SET codigo = ${parsed.data.codigo}, area_m2 = ${parsed.data.area_m2}, ubicacion = ${parsed.data.ubicacion ?? null}, valor = ${parsed.data.valor}, 
-          estado = ${parsed.data.estado}, etapa_id = ${parsed.data.etapa_id}, descripcion = ${parsed.data.descripcion ?? null},
-          cuartos = ${parsed.data.cuartos}, baños = ${parsed.data.baños}, parqueaderos = ${parsed.data.parqueaderos},
-          foto_url = ${parsed.data.foto_url ?? null}, updated_at = NOW()
+      UPDATE lotes
+      SET area_m2 = ${parsed.data.area_m2}, ubicacion = ${parsed.data.ubicacion ?? null}, valor = ${parsed.data.valor},
+          etapa_id = ${parsed.data.etapa_id}, descripcion = ${parsed.data.descripcion ?? null},
+          cuartos = ${parsed.data.cuartos}, banos = ${parsed.data.banos}, parqueaderos = ${parsed.data.parqueaderos},
+          imagen_url = ${parsed.data.imagen_url ?? null}, updated_at = NOW()
       WHERE id = ${Number(id)}
     `
-  } catch {
+  } catch (e) {
+    console.error('Error al actualizar lote:', e)
     return { error: 'Error al actualizar el lote' }
   }
 

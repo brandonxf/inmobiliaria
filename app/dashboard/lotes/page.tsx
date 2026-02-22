@@ -27,8 +27,8 @@ export default async function LotesPage() {
           <Card key={lote.id} className="overflow-hidden flex flex-col">
             {/* Imagen */}
             <div className="relative h-40 bg-muted">
-              {lote.foto_url ? (
-                <img src={lote.foto_url} alt={`Lote ${lote.codigo}`} className="h-full w-full object-cover" />
+              {lote.imagen_url ? (
+                <img src={lote.imagen_url} alt={`Lote ${lote.codigo}`} className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full items-center justify-center">
                   <MapPin className="h-10 w-10 text-muted-foreground/30" />
@@ -61,7 +61,7 @@ export default async function LotesPage() {
                 </div>
                 <div className="flex items-center gap-2">
                   <Waves className="h-4 w-4 text-muted-foreground" />
-                  <span>{lote.baños} baños</span>
+                  <span>{lote.banos} baños</span>
                 </div>
                 {lote.parqueaderos > 0 && (
                   <div className="flex items-center gap-2">

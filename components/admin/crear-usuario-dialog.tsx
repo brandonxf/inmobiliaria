@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react'
 import { crearUsuarioAction } from '@/lib/actions/admin'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -24,6 +24,7 @@ export function CrearUsuarioDialog() {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Crear Usuario</DialogTitle>
+          <DialogDescription>Completa los datos para crear un nuevo usuario.</DialogDescription>
         </DialogHeader>
         <form action={action} className="flex flex-col gap-4">
           {state?.error && (

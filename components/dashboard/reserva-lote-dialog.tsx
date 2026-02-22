@@ -4,7 +4,7 @@ import { useActionState, useState, useMemo } from 'react'
 import { crearReservaAction } from '@/lib/actions/client'
 import { formatCurrency } from '@/lib/format'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -17,7 +17,7 @@ interface ReservaLoteDialogProps {
     valor: number
     area_m2: number
     cuartos: number
-    baños: number
+    banos: number
   }
   onClose: () => void
 }
@@ -38,13 +38,13 @@ export function ReservaLoteDialog({ lote, onClose }: ReservaLoteDialogProps) {
     if (lote.cuartos > 3) porcentaje += 5
     
     // Ajuste basado en baños
-    if (lote.baños > 2) porcentaje += 3
+    if (lote.banos > 2) porcentaje += 3
     
     // Minimo 10%, máximo 50%
     porcentaje = Math.max(10, Math.min(50, porcentaje))
     
     return (lote.valor * porcentaje) / 100
-  }, [cuotaInicial, lote.cuartos, lote.baños, lote.valor])
+  }, [cuotaInicial, lote.cuartos, lote.banos, lote.valor])
 
   const saldoPendiente = lote.valor - cuotaInicialCalculada
   const valorPorCuota = numCuotas ? saldoPendiente / parseInt(numCuotas) : 0
@@ -65,6 +65,7 @@ export function ReservaLoteDialog({ lote, onClose }: ReservaLoteDialogProps) {
       <DialogContent className="max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Reservar Lote {lote.codigo}</DialogTitle>
+          <DialogDescription>Completa los datos para reservar este lote.</DialogDescription>
         </DialogHeader>
 
         <form action={action} className="flex flex-col gap-4">

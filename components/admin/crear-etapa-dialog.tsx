@@ -3,7 +3,7 @@
 import { useActionState, useState } from 'react'
 import { crearEtapaAction } from '@/lib/actions/admin'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -20,7 +20,10 @@ export function CrearEtapaDialog() {
         <Button className="gap-2"><Plus className="h-4 w-4" />Nueva Etapa</Button>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader><DialogTitle>Crear Etapa</DialogTitle></DialogHeader>
+        <DialogHeader>
+          <DialogTitle>Crear Etapa</DialogTitle>
+          <DialogDescription>Completa los datos para crear una nueva etapa.</DialogDescription>
+        </DialogHeader>
         <form action={action} className="flex flex-col gap-4">
           {state?.error && (
             <div className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2.5 text-sm text-destructive">
