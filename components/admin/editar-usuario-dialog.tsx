@@ -71,7 +71,7 @@ export function EditarUsuarioDialog({ usuario }: EditarUsuarioDialogProps) {
           <div className="flex flex-col gap-2">
             <Label htmlFor="rol">Rol</Label>
             <Select name="rol" defaultValue={usuario.rol}>
-              <SelectTrigger>
+              <SelectTrigger id="rol">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

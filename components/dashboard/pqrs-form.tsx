@@ -37,7 +37,7 @@ export function PqrsForm() {
           <div className="flex flex-col gap-2">
             <Label htmlFor="tipo">Tipo</Label>
             <Select name="tipo" required>
-              <SelectTrigger>
+              <SelectTrigger id="tipo">
                 <SelectValue placeholder="Selecciona el tipo" />
               </SelectTrigger>
               <SelectContent>

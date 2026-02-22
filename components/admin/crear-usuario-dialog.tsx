@@ -63,7 +63,7 @@ export function CrearUsuarioDialog() {
           <div className="flex flex-col gap-2">
             <Label htmlFor="rol">Rol</Label>
             <Select name="rol" defaultValue="cliente">
-              <SelectTrigger>
+              <SelectTrigger id="rol">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>

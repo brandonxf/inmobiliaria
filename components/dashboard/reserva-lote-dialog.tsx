@@ -103,7 +103,7 @@ export function ReservaLoteDialog({ lote, onClose }: ReservaLoteDialogProps) {
             <div className="flex flex-col gap-2">
               <Label htmlFor="metodo_pago">Método de Pago</Label>
               <Select name="metodo_pago" value={metodoPago} onValueChange={setMetodoPago}>
-                <SelectTrigger>
+                <SelectTrigger id="metodo_pago">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -123,7 +123,7 @@ export function ReservaLoteDialog({ lote, onClose }: ReservaLoteDialogProps) {
             <div className="flex flex-col gap-2">
               <Label htmlFor="num_cuotas">Número de Cuotas</Label>
               <Select name="num_cuotas" value={numCuotas} onValueChange={setNumCuotas}>
-                <SelectTrigger>
+                <SelectTrigger id="num_cuotas">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>

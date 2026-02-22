@@ -58,7 +58,7 @@ export function PagoForm({ compras }: PagoFormProps) {
           <div className="flex flex-col gap-2">
             <Label htmlFor="compra_id">Compra</Label>
             <Select name="compra_id" required>
-              <SelectTrigger>
+              <SelectTrigger id="compra_id">
                 <SelectValue placeholder="Selecciona la compra" />
               </SelectTrigger>
               <SelectContent>
@@ -79,7 +79,7 @@ export function PagoForm({ compras }: PagoFormProps) {
           <div className="flex flex-col gap-2">
             <Label htmlFor="metodo_pago">Metodo de Pago</Label>
             <Select name="metodo_pago" required>
-              <SelectTrigger>
+              <SelectTrigger id="metodo_pago">
                 <SelectValue placeholder="Selecciona metodo" />
               </SelectTrigger>
               <SelectContent>

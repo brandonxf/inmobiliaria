@@ -98,7 +98,7 @@ export function EditarLoteDialog({ lote, etapas }: EditarLoteDialogProps) {
           <div className="flex flex-col gap-2">
             <Label htmlFor="etapa_id">Etapa</Label>
             <Select name="etapa_id" defaultValue={lote.etapa_id ? String(lote.etapa_id) : 'none'}>
-              <SelectTrigger>
+              <SelectTrigger id="etapa_id">
                 <SelectValue placeholder="Sin etapa" />
               </SelectTrigger>
               <SelectContent>
